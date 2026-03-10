@@ -1,12 +1,12 @@
 import { IBuyer, TPayment, IValidationResult } from "../../../types";
 
-export class Buyers {
+export class Buyer {
     protected _payment: TPayment = null;
     protected _address: string = '';
     protected _phone: string = '';
     protected _email: string = '';
 
-    сonstructor() {
+    constructor() {
     }
     
     setData(data: IBuyer): void {
@@ -53,3 +53,4 @@ export class Buyers {
         return errors
     }
 }
+

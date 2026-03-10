@@ -4,7 +4,7 @@ export class Products {
     protected _items: IProduct[] = [];
     protected _currentItem: IProduct | null = null;
 
-    сonstructor() {
+    constructor() {
     }
 
     setItems(items: IProduct[]): void {
@@ -27,3 +27,4 @@ export class Products {
         return this._currentItem;
     }
 }
+
