@@ -46,6 +46,10 @@ export class Buyers {
             errors.address = 'Введите адрес';
         }
 
+        if (!this._email) {
+            errors.email = 'Введите электронную почту'
+        }
+
         return errors
     }
 }

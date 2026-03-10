@@ -2,8 +2,9 @@ import './scss/styles.scss';
 import { Buyers } from './components/base/models/buyer';
 import { Products } from './components/base/models/products';
 import { Cart } from './components/base/models/cart';
+import { orderApi } from './components/base/Api';
 import { apiProducts } from './utils/data';
-import { Api, orderApi } from './components/base/Api';
+import { Api } from './components/base/Api';
 import { API_URL } from './utils/constants';
 
 const buyer = new Buyers();
@@ -67,4 +68,6 @@ orderApiInstance.getOrder()
         console.error('Error fetching products:', error);
     });
 
-
+const emptyBuyer = new Buyers();
+console.log('Empty buyer data:', emptyBuyer.getData());
+console.log('Empty buyer validation:', emptyBuyer.validateData());
