@@ -11,7 +11,7 @@ import { Basket } from './components/base/views/basket';
 import { Cart } from './components/base/models/cart';
 import { ContactsForm , OrderForm } from './components/base/views/form';
 import { Success } from './components/base/views/success';
-import { Buyers } from './components/base/models/buyer';
+import { Buyer } from './components/base/models/buyer';
 import { Header } from './components/base/views/header';
 
 const events = new EventEmitter();
@@ -23,7 +23,7 @@ const contactsForm = new ContactsForm(events, cloneTemplate<HTMLFormElement>('#c
 const orderForm = new OrderForm(events, cloneTemplate<HTMLFormElement>('#order'));
 const success = new Success(events, cloneTemplate<HTMLElement>('#success'));
 const cart = new Cart(events);
-const buyer = new Buyers(events);
+const buyer = new Buyer(events);
 const header = new Header(events, document.querySelector('.header') as HTMLElement);
 
 events.on<{items: IProduct[]}>('products.update', ({items}) => {
