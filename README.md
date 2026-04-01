@@ -172,5 +172,284 @@ Presenter - презентер содержит основную логику п
 `getOrder(): Promise<IProductsList>` — выполняет GET-запрос на эндпоинт /product/. Возвращает объект, содержащий массив товаров и их общее количество (соответствует интерфейсу IProductsList).
 `postOrder(order: IOrder): Promise<IOrderResult>` — выполняет POST-запрос на эндпоинт /order/. Принимает объект с данными о заказе (соответствует интерфейсу IOrder) и возвращает результат оформления от сервера (соответствует интерфейсу IOrderResult).
 
+### Слой представления
+
+#### Классы представления
+
+##### Класс `Header`
+Интерфейс данных: `HeaderData`
+
+Поля данных:
+`counter: number`
+
+Поля класса:
+`counterElement: HTMLElement`
+`basketButton: HTMLButtonElement`
+
+Конструктор:
+`constructor(container: HTMLElement, )`
+
+Сеттеры:
+`set counter(value: number)` — обновляет счетчик товаров в корзине.
+
+Методы:
+``
+
+##### Класс `Gallery`
+Интерфейс данных: `GalleryData`
+
+Поля данных:
+`items: HTMLElement[]`
+
+Поля класса:
+`galleryElement: HTMLElement`
+
+Сеттеры:
+`set items(items: HTMLElement[])` — обновляет список элементов каталога.
+
+##### Класс `Modal`
+Интерфейс данных: `ModalData`
+
+Поля данных:
+`content: HTMLElement`
+
+Поля класса:
+`closeButton: HTMLButtonElement`
+`modalContent: HTMLElement`
+
+Сеттеры:
+`set content(value: HTMLElement)` — заменяет содержимое контейнера `.modal__content`.
+
+Методы:
+`open()` — добавляет контейнеру модального окна класс `modal__active` и открывает модальное окно.
+`close()` — удаляет у контейнера модального окна класс `modal__active` и закрывает модальное окно.
+
+##### Класс `Card` (базовая карточка)
+Интерфейс данных: `ICardData`
+
+Поля данных:
+`id: number`
+`title: string`
+`category: string`
+`image: string`
+`price: number | null`
+
+Поля класса:
+`_id: number` — внутреннее поле для хранения id товара.
+`titleElement: HTMLElement`
+`imageElement?: HTMLImageElement`
+`categoryElement?: HTMLElement`
+`priceElement: HTMLElement`
+`buttonElement?: HTMLButtonElement`
+
+Сеттеры:
+`set id(value: number)` — сохраняет id товара для дальнейших действий с карточкой.
+`set title(value: string)` — устанавливает название товара.
+`set category(value: string)` — устанавливает категорию.
+`set image(value: string)` — устанавливает ссылку на изображение через `setImage`.
+`set price(value: number | null)` — устанавливает цену, обрабатывая `null` как «недоступно».
+
+Геттеры:
+`get id(): number` — возвращает сохраненный id товара для использования в обработчиках событий.
+
+##### Класс `CardPreview` (карточка в модальном окне)
+Расширяет `Card`.
+Интерфейс данных: `ICardPreviewData`
+
+Поля данных:
+`description: string`
+`selected: boolean`
+
+Поля класса:
+`descriptionElement: HTMLElement`
+
+Сеттеры:
+`set description(value: string)` — устанавливает текст описания товара.
+`set selected(value: boolean)` — меняет текст кнопки на «Удалить из корзины» или «Купить».
+
+##### Класс `CardBasket` (карточка в корзине)
+Расширяет `Card`.
+Интерфейс данных: `ICardBasketData`
+
+Поля данных:
+`index: number`
+
+Поля класса:
+`indexElement: HTMLElement`
+`cardButton: HTMLButtonElement`
+
+Сеттеры:
+`set index(value: number)` — устанавливает порядковый номер в списке корзины.
+
+##### Класс `Basket`
+Интерфейс данных: `IBasketData`
+
+Поля данных:
+`items: HTMLElement[]`
+`total: number`
+
+Поля класса:
+`listElement: HTMLElement` — контейнер для карточек `basket__list`.
+`totalElement: HTMLElement` — элемент для вывода итоговой суммы.
+`buyButton: HTMLButtonElement` — кнопка «Оформить».
+
+Сеттеры:
+`set items(items: HTMLElement[])` — заменяет содержимое списка корзины.
+`set total(value: number)` — обновляет итоговую цену и текст в `.basket__price`.
+
+##### Класс `Form` (базовый класс для форм)
+Интерфейс данных: `IFormData`
+
+Поля данных:
+`valid: boolean`
+`errors: string[]`
+
+Поля класса:
+`submitElement: HTMLButtonElement`
+`errorsElement: HTMLElement`
+
+Сеттеры:
+`set valid(value: boolean)` — управляет доступностью кнопки отправки формы.
+`set errors(value: string[])` — выводит ошибки одной строкой в `.form__errors`.
+
+##### Класс `OrderForm` (форма доставки)
+Расширяет `Form`.
+Интерфейс данных: `IOrderData`
+
+Поля данных:
+`payment: string`
+`address: string`
+
+Поля класса:
+`cardButton: HTMLButtonElement` — кнопка онлайн-оплаты.
+`cashButton: HTMLButtonElement` — кнопка оплаты при получении.
+`addressInput: HTMLInputElement` — поле ввода адреса.
+`_payment: string` — внутреннее поле для сохранения выбранного способа оплаты.
+
+Сеттеры:
+`set payment(value: string)` — переключает активное состояние кнопок выбора способа оплаты.
+`set address(value: string)` — устанавливает значение поля адреса.
+
+##### Класс `ContactsForm` (форма контактов)
+Расширяет `Form`.
+Интерфейс данных: `IContactsData`
+
+Поля данных:
+`email: string`
+`phone: string`
+
+Поля класса:
+`emailInput: HTMLInputElement`
+`phoneInput: HTMLInputElement`
+
+Сеттеры:
+`set email(value: string)` — устанавливает значение поля email.
+`set phone(value: string)` — устанавливает значение поля телефона.
+
+##### Класс `Success`
+Интерфейс данных: `ISuccessData`
+
+Поля данных:
+`total: number`
+
+Поля класса:
+`descriptionElement: HTMLElement` — элемент для вывода суммы списания.
+`closeButton: HTMLButtonElement` — кнопка закрытия или «За новыми покупками».
+
+Сеттеры:
+`set total(value: number)` — устанавливает текст о списанной сумме.
+
+### Описание событий
+
+#### События моделей
+
+`products.update`  
+Инициатор: класс `Products`.  
+Вызывается при обновлении каталога товаров методом `setItems`.  
+Передаваемые данные: `{ items: IProduct[] }`.
+
+`products.current`  
+Инициатор: класс `Products`.  
+Вызывается при выборе текущего товара методом `setCurrentItem`.  
+Передаваемые данные: `{ item: IProduct | null }`.
+
+`cart.update`  
+Инициатор: класс `Cart`.  
+Вызывается при любом изменении корзины: добавлении товара, удалении товара или полной очистке корзины.  
+Передаваемые данные: `{ items: IProduct[] }`.
+
+`buyer.changed`  
+Инициатор: класс `Buyers`.  
+Вызывается при изменении данных покупателя в методе `setData`, а также при очистке данных методом `clearData`.  
+Передаваемые данные: частичные или полные данные покупателя, например `{ payment }`, `{ address }`, `{ phone }`, `{ email }` или полный объект `IBuyer`.
+
+#### События представлений
+
+`card.select`  
+Инициатор: класс `Card`.  
+Вызывается при выборе карточки товара для просмотра.  
+Передаваемые данные: `{ id: number }` — идентификатор выбранного товара.
+
+`basket.add`  
+Инициатор: класс `CardPreview`.  
+Вызывается при нажатии на кнопку покупки товара в окне предпросмотра.  
+Передаваемые данные: `{ id: number }` — идентификатор добавляемого товара.
+
+`basket.remove`  
+Инициатор: класс `CardBasket`.  
+Вызывается при нажатии на кнопку удаления товара из корзины.  
+Передаваемые данные: `{ id: number }` — идентификатор удаляемого товара.
+
+`basket.open`  
+Инициатор: класс `Header`.  
+Вызывается при нажатии на кнопку корзины в шапке сайта.  
+Передаваемые данные: отсутствуют.
+
+`basket.buy`  
+Инициатор: класс `Basket`.  
+Вызывается при нажатии на кнопку «Оформить» в корзине.  
+Передаваемые данные: отсутствуют.
+
+`order.submit`  
+Инициатор: базовый класс `Form` для формы с атрибутом `name="order"`.  
+Вызывается при нажатии на кнопку перехода ко второй форме оформления заказа.  
+Передаваемые данные: отсутствуют.
+
+`contacts.submit`  
+Инициатор: базовый класс `Form` для формы с атрибутом `name="contacts"`.  
+Вызывается при нажатии на кнопку оплаты и завершения оформления заказа.  
+Передаваемые данные: отсутствуют.
+
+`payment.change`  
+Инициатор: класс `OrderForm`.  
+Вызывается при изменении данных в форме выбора способа оплаты.  
+Передаваемые данные: `{ payment: 'card' }` или `{ payment: 'cash' }`.
+
+`order.change`  
+Инициатор: класс `OrderForm`.  
+Вызывается при изменении данных в форме доставки.  
+Передаваемые данные: `{ address: string }`.
+
+`contacts.change`  
+Инициатор: класс `ContactsForm`.  
+Вызывается при изменении данных в форме контактных данных.  
+Передаваемые данные: `{ email: string }` или `{ phone: string }`.
+
+`modal.close`  
+Инициатор: класс `Modal`.  
+Вызывается при нажатии на кнопку закрытия модального окна.  
+Передаваемые данные: отсутствуют.
+
+`success.close`  
+Инициатор: класс `Success`.  
+Вызывается при нажатии на кнопку закрытия окна успешного оформления заказа.  
+Передаваемые данные: отсутствуют.
+
+### Презентер
+
+
+
+
+
 
 

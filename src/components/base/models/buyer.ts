@@ -1,19 +1,37 @@
 import { IBuyer, TPayment, IValidationResult } from "../../../types";
+import { IEvents } from "../Events";
 
 export class Buyers {
     protected _payment: TPayment = null;
     protected _address: string = '';
     protected _phone: string = '';
     protected _email: string = '';
+    protected events?: IEvents;
 
-    сonstructor() {
+    constructor(events?: IEvents) {
+        this.events = events;
     }
-    
+
     setData(data: IBuyer): void {
-        if (data.payment !== undefined) this._payment = data.payment;
-        if (data.address !== undefined) this._address = data.address;
-        if (data.phone !== undefined) this._phone = data.phone;
-        if (data.email !== undefined) this._email = data.email;
+        if (data.payment !== undefined) {
+            this._payment = data.payment;
+            this.events?.emit('buyer.changed', { payment: this._payment });
+        }
+
+        if (data.address !== undefined) {
+            this._address = data.address;
+            this.events?.emit('buyer.changed', { address: this._address });
+        }
+
+        if (data.phone !== undefined) {
+            this._phone = data.phone;
+            this.events?.emit('buyer.changed', { phone: this._phone });
+        }
+
+        if (data.email !== undefined) {
+            this._email = data.email;
+            this.events?.emit('buyer.changed', { email: this._email });
+        }
     }
 
     getData(): IBuyer {
@@ -30,22 +48,35 @@ export class Buyers {
         this._email = '';
         this._payment = null;
         this._phone = '';
+
+        this.events?.emit('buyer.changed', this.getData());
     }
 
-    validateData(): IValidationResult {
-        const errors: IValidationResult = {}
+    validateOrder(): IValidationResult {
+        const errors: IValidationResult = {};
+
         if (!this._payment) {
             errors.payment = 'Выберите способ оплаты';
         }
 
-        if (!this._phone) {
-            errors.phone = 'Введите номер телефона';
-        }
-
-        if (!this._address) {
+        if (!this._address.trim()) {
             errors.address = 'Введите адрес';
         }
 
-        return errors
+        return errors;
+    }
+
+    validateContacts(): IValidationResult {
+        const errors: IValidationResult = {};
+
+        if (!this._email.trim()) {
+            errors.email = 'Введите email';
+        }
+
+        if (!this._phone.trim()) {
+            errors.phone = 'Введите номер телефона';
+        }
+
+        return errors;
     }
 }

@@ -1,14 +1,18 @@
 import { IProduct } from "../../../types";
+import { IEvents } from "../Events";
 
 export class Products {
     protected _items: IProduct[] = [];
     protected _currentItem: IProduct | null = null;
+    events?: IEvents;
 
-    сonstructor() {
+    constructor(events: IEvents) {
+        this.events = events;
     }
 
     setItems(items: IProduct[]): void {
         this._items = items;
+        this.events?.emit('products.update', { items: this._items });
     }
 
     getItems(): IProduct[] {
@@ -21,6 +25,7 @@ export class Products {
 
     setCurrentItem(product: IProduct): void {
         this._currentItem = product;
+        this.events?.emit('products.current', { item: this._currentItem });
     }
 
     getCurrentItem(): IProduct | null {
