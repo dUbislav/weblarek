@@ -40,3 +40,4 @@ export class Cart {
         return this._items.some(item => item.id === id);
     }
 }
+

@@ -1,7 +1,7 @@
 import { IBuyer, TPayment, IValidationResult } from "../../../types";
 import { IEvents } from "../Events";
 
-export class Buyers {
+export class Buyer {
     protected _payment: TPayment = null;
     protected _address: string = '';
     protected _phone: string = '';

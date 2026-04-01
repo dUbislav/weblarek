@@ -32,3 +32,4 @@ export class Products {
         return this._currentItem;
     }
 }
+
