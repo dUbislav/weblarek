@@ -1,7 +1,7 @@
-import { Component } from "../Component";
-import { ensureElement } from "../../../utils/utils";
-import { IEvents } from "../Events";
-import { TPayment } from "../../../types";
+import { Component } from "../base/Component";
+import { ensureElement } from "../../utils/utils";
+import { IEvents } from "../base/Events";
+import { TPayment } from "../../types";
 
 interface IForm {
     valid: boolean;
@@ -46,7 +46,6 @@ export class OrderForm extends Form<IOrder> {
     protected cardButton: HTMLButtonElement;
     protected cashButton: HTMLButtonElement;
     protected addressInput: HTMLInputElement;
-    protected _payment: TPayment = null;
 
     constructor(events: IEvents, container: HTMLFormElement) {
         super(events, container);
@@ -55,11 +54,11 @@ export class OrderForm extends Form<IOrder> {
         this.addressInput = ensureElement<HTMLInputElement>('input[name="address"]', this.container);
 
         this.cardButton.addEventListener('click', () => {
-            this.events.emit('payment.change', { payment: 'card' });
+            this.events.emit('order.change', { payment: 'card' });
         });
 
         this.cashButton.addEventListener('click', () => {
-            this.events.emit('payment.change', { payment: 'cash' });
+            this.events.emit('order.change', { payment: 'cash' });
         });
 
         this.addressInput.addEventListener('input', () => {
@@ -68,7 +67,6 @@ export class OrderForm extends Form<IOrder> {
     }
 
     set payment(value: TPayment) {
-        this._payment = value;
         this.cardButton.classList.toggle('button_alt-active', value === 'card');
         this.cashButton.classList.toggle('button_alt-active', value === 'cash');
     }

@@ -1,5 +1,5 @@
-import { IProduct } from "../../../types";
-import { IEvents } from "../Events";
+import { IProduct } from "../../types";
+import { IEvents } from "../base/Events";
 
 export class Cart {
     protected _items: IProduct[] = [];
@@ -15,17 +15,17 @@ export class Cart {
 
     addItem(item: IProduct): void {
         this._items.push(item);
-        this.events.emit('cart.update', { items: this._items });
+        this.events.emit('cart.update');
     }
 
     deleteItem(id: string): void {
         this._items = this._items.filter(item => item.id !== id);
-        this.events.emit('cart.update', { items: this._items });
+        this.events.emit('cart.update');
     }
 
     clearCart(): void {
         this._items = [];
-        this.events.emit('cart.update', { items: this._items });
+        this.events.emit('cart.update');
     }
 
     getTotalPrice(): number {

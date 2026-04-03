@@ -1,5 +1,5 @@
-import { IProduct } from "../../../types";
-import { IEvents } from "../Events";
+import { IProduct } from "../../types";
+import { IEvents } from "../base/Events";
 
 export class Products {
     protected _items: IProduct[] = [];
@@ -12,7 +12,7 @@ export class Products {
 
     setItems(items: IProduct[]): void {
         this._items = items;
-        this.events?.emit('products.update', { items: this._items });
+        this.events?.emit('products.update');
     }
 
     getItems(): IProduct[] {
@@ -25,7 +25,7 @@ export class Products {
 
     setCurrentItem(product: IProduct): void {
         this._currentItem = product;
-        this.events?.emit('products.current', { item: this._currentItem });
+        this.events?.emit('products.current');
     }
 
     getCurrentItem(): IProduct | null {

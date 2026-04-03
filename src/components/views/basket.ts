@@ -1,10 +1,11 @@
-import { Component } from "../Component";
-import { ensureElement } from "../../../utils/utils";
-import { IEvents } from "../Events";
+import { Component } from "../base/Component";
+import { ensureElement } from "../../utils/utils";
+import { IEvents } from "../base/Events";
 
 interface IBasket {
     items: HTMLElement[];
     total: number;
+    buttonDisabled: boolean;
 }
 
 export class Basket extends Component<IBasket> {
@@ -29,5 +30,9 @@ export class Basket extends Component<IBasket> {
 
     set total(value: number) {
         this.totalElement.textContent = `${value} синапсов`;
+    }
+
+    set buttonDisabled(value: boolean) {
+        this.buyButton.disabled = value;
     }
 }
